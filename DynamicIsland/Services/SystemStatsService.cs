@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 
 namespace DynamicIsland.Services;
@@ -8,7 +9,10 @@ namespace DynamicIsland.Services;
 /// <param name="Gpu">Busiest GPU engine, 0-100; null if Windows exposes no GPU counters.</param>
 /// <param name="BatteryPercent">null on PCs without a battery.</param>
 /// <param name="PluggedIn">True when on AC power.</param>
-public sealed record SystemStats(double? Cpu, double? Ram, double? Gpu, int? BatteryPercent, bool PluggedIn);
+/// <param name="DownloadBytesPerSec">Bytes received per second across all active NICs; null before the first delta.</param>
+/// <param name="UploadBytesPerSec">Bytes sent per second across all active NICs; null before the first delta.</param>
+public sealed record SystemStats(double? Cpu, double? Ram, double? Gpu, int? BatteryPercent, bool PluggedIn,
+    long? DownloadBytesPerSec = null, long? UploadBytesPerSec = null);
 
 /// <summary>
 /// Reads CPU, RAM, GPU and battery from built-in Windows APIs (no admin, no vendor tools).
@@ -25,16 +29,23 @@ public sealed class SystemStatsService
     private readonly Dictionary<string, CounterSample> _prevGpu = new();
     private bool? _gpuAvailable;
 
+    // Network
+    private long _prevRecv = -1, _prevSent = -1;
+    private long _prevNetTicks;
+
     public void Baseline()
     {
         _hasCpuBaseline = ReadCpuTimes(out _prevIdle, out _prevKernel, out _prevUser);
         _prevGpu.Clear();
+        ReadNetTotals(out _prevRecv, out _prevSent);
+        _prevNetTicks = Environment.TickCount64;
     }
 
     public SystemStats Sample()
     {
         var (battery, plugged) = ReadBattery();
-        return new SystemStats(SampleCpu(), SampleRam(), SampleGpu(), battery, plugged);
+        var (down, up) = SampleNet();
+        return new SystemStats(SampleCpu(), SampleRam(), SampleGpu(), battery, plugged, down, up);
     }
 
     // ----- CPU -----------------------------------------------------------
@@ -120,6 +131,50 @@ public sealed class SystemStatsService
         if (luid < 0 || phys < luid || type < 0) return null;
 
         return $"{instanceName[luid..phys]}|{instanceName[(type + "engtype_".Length)..]}";
+    }
+
+    // ----- Network (download / upload) ----------------------------------
+
+    private (long? Down, long? Up) SampleNet()
+    {
+        if (!ReadNetTotals(out long recv, out long sent)) return (null, null);
+
+        long? down = null, up = null;
+        long now = Environment.TickCount64;
+        long elapsed = now - _prevNetTicks;
+
+        if (_prevRecv >= 0 && elapsed > 0)
+        {
+            down = Math.Max(0, (recv - _prevRecv) * 1000 / elapsed);
+            up = Math.Max(0, (sent - _prevSent) * 1000 / elapsed);
+        }
+
+        _prevRecv = recv; _prevSent = sent;
+        _prevNetTicks = now;
+        return (down, up);
+    }
+
+    /// <summary>Sums BytesReceived / BytesSent across all operational, non-loopback NICs.</summary>
+    private static bool ReadNetTotals(out long recv, out long sent)
+    {
+        recv = 0; sent = 0;
+        try
+        {
+            foreach (var nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (nic.OperationalStatus != OperationalStatus.Up) continue;
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
+
+                var stats = nic.GetIPStatistics();
+                recv += stats.BytesReceived;
+                sent += stats.BytesSent;
+            }
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     // ----- Battery -------------------------------------------------------

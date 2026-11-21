@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -22,10 +22,10 @@ public partial class MainWindow : Window
 
     // Sizes. The idle pill shows only the PC stats. Capsules are 44 px high; cards are 340 px wide.
     // Pop-ups (charging, update prompt, intro) share one standard size so they never jump around.
-    private static readonly (double W, double H, double R) IdleSize = (232, 32, 16);
+    private static readonly (double W, double H, double R) IdleSize = (360, 32, 16);
     private static readonly (double W, double H, double R) StandardSize = (270, 60, 28);
     private const double CapsuleHeight = 44, CapsuleRadius = 22;
-    private const double CardWidth = 340, CardRadius = 38;
+    private const double CardWidth = 360, CardRadius = 38;
     private const double StatsBlock = 44;      // room under a card for the PC row
     private const double CardBottomPad = 16;   // bottom padding of a card that has no PC row
 
@@ -242,7 +242,7 @@ public partial class MainWindow : Window
         IslandState.Update => (306, CapsuleHeight, CapsuleRadius),
         IslandState.Privacy => (270, CapsuleHeight, CapsuleRadius),
         IslandState.Capsule when _main is Kind main => (CapsuleWidth(main, ClaudeCapsuleWidth()) + CollapsedDotExtraWidth(), CapsuleHeight, CapsuleRadius),
-        IslandState.Card when cardKind is null => (CardWidth, 150, CardRadius),
+        IslandState.Card when cardKind is null => (CardWidth, 174, CardRadius),
         IslandState.Card => (CardWidth, CardContentHeight(cardKind) + (statsRow ? StatsBlock : CardBottomPad), CardRadius),
         _ => (IdleSize.W + CollapsedDotExtraWidth(), IdleSize.H, IdleSize.R)
     };

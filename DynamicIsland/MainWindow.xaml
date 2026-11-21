@@ -40,7 +40,7 @@
         <Grid x:Name="PillHost" HorizontalAlignment="Center">
         <Border x:Name="Pill"
                 Background="Black"
-                Width="232" Height="32"
+                Width="360" Height="32"
                 CornerRadius="16"
                 HorizontalAlignment="Center"
                 MouseLeftButtonDown="Pill_MouseLeftButtonDown"
@@ -70,22 +70,22 @@
                             TextElement.FontSize="11.5" TextElement.FontWeight="SemiBold"
                             Typography.NumeralAlignment="Tabular">
                     <!-- Icons are 12x12 vector shapes; strokes sit on half pixels to stay crisp. -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,13,0" ToolTip="CPU">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,9,0" ToolTip="CPU">
                         <Path Width="12" Height="12" Stroke="#9A9AA3" StrokeThickness="1" VerticalAlignment="Center"
                               Data="M3.5,3.5 H8.5 V8.5 H3.5 Z M4.5,1 V3.5 M7.5,1 V3.5 M4.5,8.5 V11 M7.5,8.5 V11 M1,4.5 H3.5 M1,7.5 H3.5 M8.5,4.5 H11 M8.5,7.5 H11" />
-                        <TextBlock x:Name="CpuValue" Text="--" Foreground="White" Margin="4,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock x:Name="CpuValue" Text="--" Foreground="White" Margin="3.5,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,13,0" ToolTip="Memory">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,9,0" ToolTip="Memory">
                         <Path Width="12" Height="12" Stroke="#9A9AA3" StrokeThickness="1" VerticalAlignment="Center"
                               Data="M0.5,3.5 H11.5 V8.5 H0.5 Z M2.5,8.5 V10.5 M5.5,8.5 V10.5 M8.5,8.5 V10.5" />
-                        <TextBlock x:Name="RamValue" Text="--" Foreground="White" Margin="4,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock x:Name="RamValue" Text="--" Foreground="White" Margin="3.5,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
-                    <StackPanel x:Name="GpuItem" Orientation="Horizontal" Margin="0,0,13,0" ToolTip="GPU">
+                    <StackPanel x:Name="GpuItem" Orientation="Horizontal" Margin="0,0,9,0" ToolTip="GPU">
                         <Path Width="12" Height="12" Stroke="#9A9AA3" StrokeThickness="1" VerticalAlignment="Center"
                               Data="M0.5,2.5 H11.5 V9.5 H0.5 Z M8,6 A2,2 0 1 1 4,6 A2,2 0 1 1 8,6 Z" />
-                        <TextBlock x:Name="GpuValue" Text="--" Foreground="White" Margin="4,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock x:Name="GpuValue" Text="--" Foreground="White" Margin="3.5,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
-                    <StackPanel x:Name="BatteryItem" Orientation="Horizontal" Visibility="Collapsed" ToolTip="Battery">
+                    <StackPanel x:Name="BatteryItem" Orientation="Horizontal" Margin="0,0,9,0" Visibility="Collapsed" ToolTip="Battery">
                         <Grid Width="12" Height="12" VerticalAlignment="Center">
                             <Path Stroke="#9A9AA3" StrokeThickness="1"
                                   Data="M0.5,3.5 H9.5 V8.5 H0.5 Z M9.5,5 H11 V7 H9.5" />
@@ -93,7 +93,17 @@
                             <Path x:Name="BoltIcon" Fill="White" Visibility="Collapsed"
                                   Data="M5.5,4 L3.5,6.2 H5.2 L4.8,8 L6.8,5.8 H5.1 Z" />
                         </Grid>
-                        <TextBlock x:Name="BatteryValue" Text="--" Foreground="White" Margin="4,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock x:Name="BatteryValue" Text="--" Foreground="White" Margin="3.5,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel x:Name="DownloadItem" Orientation="Horizontal" Margin="0,0,9,0" Visibility="Collapsed" ToolTip="Download">
+                        <Path Width="12" Height="12" Stroke="#9A9AA3" StrokeThickness="1" VerticalAlignment="Center"
+                              Data="M6,1 V9 M2.5,6 L6,9.5 L9.5,6" />
+                        <TextBlock x:Name="DownloadValue" Text="--" Foreground="White" Margin="3.5,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel x:Name="UploadItem" Orientation="Horizontal" Visibility="Collapsed" ToolTip="Upload">
+                        <Path Width="12" Height="12" Stroke="#9A9AA3" StrokeThickness="1" VerticalAlignment="Center"
+                              Data="M6,11 V3 M2.5,6 L6,2.5 L9.5,6" />
+                        <TextBlock x:Name="UploadValue" Text="--" Foreground="White" Margin="3.5,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
 
@@ -291,7 +301,7 @@
                 <!-- ===== Expanded cards (340 px wide). The PC row (StatsView) sits along the bottom of the main card. ===== -->
 
                 <!-- Claude Code card: every session with its status ring, what it is doing, and the time -->
-                <Grid x:Name="ClaudeCard" Width="340" VerticalAlignment="Top" HorizontalAlignment="Center"
+                <Grid x:Name="ClaudeCard" Width="360" VerticalAlignment="Top" HorizontalAlignment="Center"
                       Opacity="0" IsHitTestVisible="False">
                     <StackPanel Margin="20,18,20,0">
                         <Grid Height="28">
@@ -314,7 +324,7 @@
                 </Grid>
 
                 <!-- Music card: artwork, title, progress, controls -->
-                <Grid x:Name="ExpandedView" Width="340" Height="166"
+                <Grid x:Name="ExpandedView" Width="360" Height="166"
                       HorizontalAlignment="Center" VerticalAlignment="Top"
                       Opacity="0" IsHitTestVisible="False">
                     <StackPanel Margin="20,18,20,0">
@@ -351,7 +361,7 @@
                 </Grid>
 
                 <!-- Focus card: read-only mirror of Microsoft Clock -->
-                <Grid x:Name="FocusPageView" Width="340" Height="122"
+                <Grid x:Name="FocusPageView" Width="360" Height="122"
                       HorizontalAlignment="Center" VerticalAlignment="Top"
                       Opacity="0" IsHitTestVisible="False">
                     <Grid Margin="20,16,20,0" VerticalAlignment="Top">
@@ -394,8 +404,8 @@
                     </Grid>
                 </Grid>
 
-                <!-- System card (idle island, hovered): four ring gauges, built in code -->
-                <Grid x:Name="SystemCard" Width="340" Height="150"
+                <!-- System card (idle island, hovered): ring gauges, built in code -->
+                <Grid x:Name="SystemCard" Width="360" Height="174"
                       HorizontalAlignment="Center" VerticalAlignment="Top"
                       Opacity="0" IsHitTestVisible="False">
                     <StackPanel Margin="20,18,20,0">
@@ -407,6 +417,25 @@
                             </Border>
                         </Grid>
                         <UniformGrid x:Name="SystemGauges" Rows="1" Margin="0,12,0,0" />
+                        <!-- Network speed shown as text below the ring gauges -->
+                        <Grid x:Name="NetSpeedRow" Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Path Width="10" Height="10" Stroke="#9A9AA3" StrokeThickness="1" VerticalAlignment="Center"
+                                      Data="M5,1 V7.5 M2,5 L5,8 L8,5" />
+                                <TextBlock x:Name="NetDownValue" Text="--" Foreground="White" FontSize="11" FontWeight="SemiBold"
+                                           Margin="5,0,0,0" VerticalAlignment="Center" Typography.NumeralAlignment="Tabular" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Path Width="10" Height="10" Stroke="#9A9AA3" StrokeThickness="1" VerticalAlignment="Center"
+                                      Data="M5,9 V2.5 M2,5 L5,2 L8,5" />
+                                <TextBlock x:Name="NetUpValue" Text="--" Foreground="White" FontSize="11" FontWeight="SemiBold"
+                                           Margin="5,0,0,0" VerticalAlignment="Center" Typography.NumeralAlignment="Tabular" />
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </Grid>
 

@@ -96,6 +96,17 @@ public partial class MainWindow
         text.Foreground = value >= HotLevel ? WarnBrush : NormalBrush;
     }
 
+    /// <summary>Formats bytes/s as a compact human-readable speed string (e.g. "1.2 KB/s").</summary>
+    private static string FormatSpeed(long bytesPerSec) => bytesPerSec switch
+    {
+        < 1024              => $"{bytesPerSec} B/s",
+        < 1024 * 1024       => bytesPerSec < 1024 * 10
+                                ? $"{bytesPerSec / 1024.0:0.#} KB/s"
+                                : $"{bytesPerSec / 1024.0:0} KB/s",
+        < 1024 * 1024 * 100 => $"{bytesPerSec / (1024.0 * 1024):0.#} MB/s",
+        _                   => $"{bytesPerSec / (1024.0 * 1024):0} MB/s"
+    };
+
     private void ShowStats(SystemStats s)
     {
         SetValue(CpuValue, s.Cpu);
@@ -121,6 +132,13 @@ public partial class MainWindow
             BatteryValue.Text = $"{pct}%";
             BatteryValue.Foreground = pct < LowBatteryLevel && !s.PluggedIn ? WarnBrush : NormalBrush;
         }
+
+        // Network speed in the bottom row of the pill
+        bool hasNet = s.DownloadBytesPerSec is not null;
+        DownloadItem.Visibility = hasNet ? Visibility.Visible : Visibility.Collapsed;
+        UploadItem.Visibility = hasNet ? Visibility.Visible : Visibility.Collapsed;
+        if (s.DownloadBytesPerSec is long down) DownloadValue.Text = FormatSpeed(down);
+        if (s.UploadBytesPerSec is long up) UploadValue.Text = FormatSpeed(up);
 
         if (_state == IslandState.Card && _cardKind is null) ShowGauges(s);
         if (_perfShown) ShowPerf(s);
@@ -195,6 +213,10 @@ public partial class MainWindow
 
         PowerChipText.Text = s.BatteryPercent is null ? "" : s.PluggedIn ? "Plugged in" : "On battery";
         PowerChip.Visibility = s.BatteryPercent is null ? Visibility.Collapsed : Visibility.Visible;
+
+        // Network speed row under the gauges
+        NetDownValue.Text = s.DownloadBytesPerSec is long d ? FormatSpeed(d) : "--";
+        NetUpValue.Text = s.UploadBytesPerSec is long u ? FormatSpeed(u) : "--";
     }
 
     // ----- Performance bubble (optional) ---------------------------------
