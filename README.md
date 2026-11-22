@@ -130,6 +130,20 @@ NEXUS/                an unused WinUI 3 template project, kept for reference
 
 SkyLand is made by [**C B Sajan**](https://github.com/cbsajan), under the **SkyZack** name.
 
+## Contributors
+
+Thank you to everyone who has helped build SkyLand.
+
+<a href="https://github.com/cbsajan/skyland/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=cbsajan/skyland" alt="SkyLand contributors" />
+</a>
+
+**Notable contributions**
+
+- [Ahmed Samy](https://github.com/ahmedsamy56): download and upload speed on the idle island and the System card ([#5](https://github.com/cbsajan/skyland/pull/5))
+
+Want to be on this list? Pick an issue labeled [good first issue](https://github.com/cbsajan/skyland/labels/good%20first%20issue) and read [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 SkyLand is licensed under the [Apache License 2.0](LICENSE): you may use, modify and distribute it, including commercially, as long as you keep the license and the [NOTICE](NOTICE) file and state your changes. It comes with no warranty.
