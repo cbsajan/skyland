@@ -1,6 +1,6 @@
 # SkyLand (WPF)
 
-SkyLand, by SkyZack: a Windows 11 "dynamic island", a black pill pinned to the top-centre of the primary monitor that shows the current media session and expands on hover. Formerly called Dynamic Island, which is why the code namespaces, project folders and the settings folder (`%AppData%\DynamicIsland`) keep that name.
+SkyLand, by SkyZack: a Windows 11 "dynamic island", a black pill that starts at the top-centre of the primary monitor (you can drag it anywhere) and shows the current media session and expands on hover. Formerly called Dynamic Island, which is why the code namespaces, project folders and the settings folder (`%AppData%\DynamicIsland`) keep that name.
 
 ## License
 Apache License 2.0 (`LICENSE`, verbatim from the official text) with a short `NOTICE` file ("Copyright 2026 C B Sajan (https://github.com/cbsajan)", published under the SkyZack name). The license covers the source code only; the SkyLand and SkyZack names, logos and the app icon are not licensed for use in forks (stated in the README).
@@ -51,7 +51,7 @@ The island works like the iOS Dynamic Island: **one main thing at a time, plus a
 
 - Spring animation on expand, ease-in-out on collapse; collapse starts 250 ms after the mouse leaves (`CollapseDelay`) and is animated: the card content fades out, the pill shrinks over about half a second, the capsule content fades in as it finishes, and the bubbles shrink away.
 - **Moving the island:** press and hold anywhere on the pill (not on a button or dot) and drag it where you like, for example below a browser's tab strip. The position is saved and restored at the next start (`IslandLeft` / `IslandTop` in the settings file, in DIPs). It snaps to the default top-centre spot when within about 14 DIPs, and is clamped so the window always stays on the visible desktop (also re-clamped when the resolution or monitors change). Reset with Settings > Position > Reset position or the tray menu. A press that moves less than 5 DIPs is a click, not a drag (code: `MainWindow.Position.cs`).
-- Starts on the primary monitor, top centre. Pure black pill.
+- Starts at the remembered spot, or top centre of the primary monitor when there is none. Pure black pill.
 - The window is non-activating (never takes focus), hidden from the taskbar and Alt+Tab, and always on top.
 - The window is 480 x 310 DIPs, sized for the biggest card plus the bubbles; the area around the island is fully transparent, so clicks pass through to apps underneath.
 
@@ -268,5 +268,6 @@ Quit from the tray icon (right-click, Exit). Launching a second copy exits immed
 
 ## Known gaps / next ideas
 - "Start with Windows" registers the exe path it is currently running from. If that is `bin\Debug`, rebuilding or moving the project breaks autostart. Publish to a stable folder (`dotnet publish -c Release`) and enable it from there.
-- Primary monitor only; the position is computed once at startup and does not follow resolution changes.
+- Multi-monitor is only partly handled (issue #10). The island can be dragged to any monitor and is re-clamped when the display settings change, but the default and reset position are always on the primary monitor, the clamp uses the combined bounding box of all monitors (not each monitor), mixed DPI is untested, and there is no setting to choose a monitor.
+- No fullscreen handling: the island stays on top of fullscreen games, video and presentations (issue #9).
 - Ideas for later: volume/brightness/charging HUD, auto-pop on track change, notification mirroring, settings.
