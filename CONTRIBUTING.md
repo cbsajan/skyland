@@ -46,15 +46,22 @@ Before opening a pull request, check that:
 - The feature works at 100% and at a higher display scale (125% or 150%).
 - Hovering, opening cards, minimizing and restoring still behave.
 
+## Branches
+
+- `main` is what is released. It only changes when a new version is published.
+- `develop` is where work comes together. **Every pull request targets `develop`, not `main`.**
+- Do your work on your own branch, created from an up-to-date `develop`: `feature/<name>` for a feature, `fix/<name>` for a bug fix, `docs/<name>` for documentation.
+
 ## Pull requests
 
 1. Open an issue first for anything bigger than a small fix, so we agree on the idea before you spend time on it.
-2. Fork the repo and create a branch from `main` (`fix/usb-label`, `feature/clock-on-idle`).
+2. Fork the repo and create a branch from `develop` (`fix/usb-label`, `feature/clock-on-idle`).
 3. Keep the change focused: one fix or feature per pull request.
 4. Follow the style of the surrounding code (C# 12, nullable enabled, small methods, comments that explain *why*).
 5. Update [docs/SkyLand.md](docs/SkyLand.md) (and the README if users will notice) when behavior changes.
 6. For visible changes, add a before/after screenshot or a short recording to the pull request.
 7. Write a clear commit message that says what changed and why.
+8. Open the pull request against `develop`. If GitHub proposes `main`, change the base branch to `develop` before you submit.
 
 ## Rules that protect users
 
